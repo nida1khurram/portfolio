@@ -1,0 +1,1943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>knai Developer — Frontend Web Developer</title>
+  <meta name="description" content="knai Developer — passionate Frontend Web Developer crafting beautiful, responsive & user-friendly websites." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#0EA5E9',
+            secondary: '#6366F1',
+            dark: '#FFFFFF',
+            card: '#FFFFFF',
+            surface: '#F8FAFC',
+          },
+          fontFamily: {
+            poppins: ['Poppins', 'sans-serif'],
+            inter: ['Inter', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    :root {
+      --primary: #0EA5E9;
+      --secondary: #6366F1;
+      --dark: #FFFFFF;
+      --card: #FFFFFF;
+      --surface: #F8FAFC;
+      --muted: #64748B;
+      --gradient: linear-gradient(135deg, #0EA5E9, #6366F1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--surface);
+      color: #1E293B;
+      overflow-x: hidden;
+    }
+
+    /* Custom Cursor */
+    .cursor {
+      width: 20px; height: 20px;
+      border: 2px solid var(--primary);
+      border-radius: 50%;
+      position: fixed;
+      top: 0; left: 0;
+      pointer-events: none;
+      z-index: 99999;
+      transition: transform 0.15s ease, width 0.2s, height 0.2s, background 0.2s;
+      transform: translate(-50%, -50%);
+    }
+    .cursor.grow { width: 40px; height: 40px; background: rgba(14,165,233,0.15); }
+    .cursor-dot {
+      width: 5px; height: 5px;
+      background: var(--primary);
+      border-radius: 50%;
+      position: fixed;
+      top: 0; left: 0;
+      pointer-events: none;
+      z-index: 99999;
+      transform: translate(-50%, -50%);
+      transition: none;
+    }
+
+    /* Gradient text */
+    .gradient-text {
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Gradient border */
+    .gradient-border {
+      border: 2px solid transparent;
+      background: linear-gradient(var(--card), var(--card)) padding-box,
+                  var(--gradient) border-box;
+    }
+
+    /* Gradient button */
+    .btn-gradient {
+      background: var(--gradient);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .btn-gradient:hover { transform: scale(1.05); box-shadow: 0 0 25px rgba(14,165,233,0.5); }
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--primary);
+      color: var(--primary);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .btn-outline:hover { background: var(--primary); color: #fff; transform: scale(1.05); box-shadow: 0 8px 25px rgba(14,165,233,0.3); }
+
+    /* Navbar */
+    #navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
+      height: 70px;
+      display: flex; align-items: center;
+      padding: 0 5%;
+      transition: all 0.4s ease;
+      background: transparent;
+    }
+    #navbar.scrolled {
+      background: rgba(255,255,255,0.97);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    .nav-link {
+      position: relative;
+      font-size: 12px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      font-weight: 500;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.3s;
+      padding-bottom: 4px;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 50%;
+      width: 0; height: 2px;
+      background: var(--gradient);
+      transition: all 0.3s ease;
+      transform: translateX(-50%);
+    }
+    .nav-link:hover, .nav-link.active { color: #0EA5E9; }
+    .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+
+    /* Logo hover */
+    #navbar img[src="logo.png"], footer img[src="logo.png"] {
+      transition: transform 0.3s ease;
+    }
+    #navbar img[src="logo.png"]:hover, footer img[src="logo.png"]:hover {
+      transform: scale(1.15);
+    }
+
+    /* Hero */
+    #hero {
+      min-height: 100vh;
+      background-image: url('hero.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      position: relative;
+      display: flex; align-items: center;
+    }
+    #hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.92) 0%, rgba(14,165,233,0.15) 100%);
+    }
+    .hero-content { position: relative; z-index: 1; }
+
+    /* Floating animation */
+    @keyframes float {
+      0%,100%{ transform: translateY(0px); }
+      50%{ transform: translateY(-20px); }
+    }
+    @keyframes floatSlow {
+      0%,100%{ transform: translateY(0px) rotate(0deg); }
+      50%{ transform: translateY(-12px) rotate(3deg); }
+    }
+    @keyframes spinSlow {
+      from{ transform: rotate(0deg); }
+      to{ transform: rotate(360deg); }
+    }
+    @keyframes pulseRing {
+      0%{ box-shadow: 0 0 0 0 rgba(14,165,233,0.4); }
+      70%{ box-shadow: 0 0 0 20px rgba(108,99,255,0); }
+      100%{ box-shadow: 0 0 0 0 rgba(108,99,255,0); }
+    }
+    @keyframes slideUp {
+      from{ opacity:0; transform:translateY(40px); }
+      to{ opacity:1; transform:translateY(0); }
+    }
+    @keyframes fadeIn {
+      from{ opacity:0; }
+      to{ opacity:1; }
+    }
+    @keyframes gradientShift {
+      0%{ background-position:0% 50%; }
+      50%{ background-position:100% 50%; }
+      100%{ background-position:0% 50%; }
+    }
+    @keyframes bounceDown {
+      0%,100%{ transform:translateY(0); }
+      50%{ transform:translateY(10px); }
+    }
+    @keyframes countUp { from{opacity:0;} to{opacity:1;} }
+
+    .float-anim { animation: float 3s ease-in-out infinite; }
+    .float-slow { animation: floatSlow 4s ease-in-out infinite; }
+    .spin-slow { animation: spinSlow 8s linear infinite; }
+    .pulse-ring { animation: pulseRing 2s infinite; }
+    .bounce-down { animation: bounceDown 1.5s ease-in-out infinite; }
+
+    /* Reveal on scroll */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-left { opacity:0; transform:translateX(-50px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal-left.visible { opacity:1; transform:translateX(0); }
+    .reveal-right { opacity:0; transform:translateX(50px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal-right.visible { opacity:1; transform:translateX(0); }
+
+    /* Skill bar */
+    .skill-bar-fill {
+      height: 100%;
+      background: var(--gradient);
+      border-radius: 999px;
+      width: 0;
+      transition: width 1.5s ease;
+    }
+    .skill-bar-bg {
+      height: 8px;
+      background: #E2E8F0;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    /* Project card */
+    .project-card {
+      border-radius: 16px;
+      overflow: hidden;
+      background: var(--card);
+      border: 1px solid rgba(14,165,233,0.15);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    }
+    .project-card:hover {
+      transform: translateY(-10px);
+      border-color: rgba(14,165,233,0.5);
+      box-shadow: 0 20px 60px rgba(14,165,233,0.15);
+    }
+    .project-img-wrap { overflow: hidden; aspect-ratio: 16/9; position: relative; }
+    .project-img-wrap img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    .project-card:hover .project-img-wrap img { transform: scale(1.1); }
+    .project-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(15,15,26,0.9) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 1.5rem;
+    }
+    .project-card:hover .project-overlay { opacity: 1; }
+
+    /* FAQ */
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.3s ease;
+    }
+    .faq-answer.open { max-height: 300px; }
+    .faq-item.open { border-left: 3px solid var(--primary); background: #F0F9FF; }
+    .faq-chevron { transition: transform 0.3s ease; }
+    .faq-item.open .faq-chevron { transform: rotate(180deg); }
+
+    /* Modal */
+    #hireModal {
+      position: fixed; inset: 0; z-index: 99998;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(8px);
+      display: none; align-items: center; justify-content: center;
+      padding: 1rem;
+    }
+    #hireModal.show { display: flex; }
+    .modal-box {
+      background: #fff;
+      border-radius: 20px;
+      border: 1px solid #E2E8F0;
+      width: 100%; max-width: 540px;
+      max-height: 90vh; overflow-y: auto;
+      padding: 2.5rem;
+      animation: slideUp 0.3s ease;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.15);
+    }
+
+    /* Form inputs */
+    .form-input {
+      width: 100%;
+      background: #fff;
+      border: 1px solid #CBD5E1;
+      border-radius: 10px;
+      padding: 12px 16px;
+      color: #1E293B;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .form-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(14,165,233,0.1);
+    }
+    .form-input::placeholder { color: #94A3B8; }
+    select.form-input option { background: #fff; }
+
+    /* Toast */
+    #toast {
+      position: fixed; bottom: 2rem; right: 2rem; z-index: 999999;
+      background: #10B981;
+      color: #fff;
+      padding: 1rem 1.5rem;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      display: none;
+      align-items: center; gap: 10px;
+      box-shadow: 0 10px 30px rgba(16,185,129,0.3);
+      animation: slideUp 0.3s ease;
+    }
+    #toast.show { display: flex; }
+
+    /* Section titles */
+    .section-label {
+      font-size: 13px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--primary);
+      font-weight: 500;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+    .section-title {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      line-height: 1.2;
+    }
+
+    /* Stats */
+    .stat-item { text-align: center; }
+    .stat-number {
+      font-family: 'Poppins', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 800;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Profile ring */
+    .profile-ring {
+      position: absolute; inset: -8px;
+      border-radius: 50%;
+      border: 3px solid transparent;
+      background: var(--gradient) border-box;
+      -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: destination-out;
+      mask-composite: exclude;
+    }
+
+    .bg-gradient-card {
+      background: linear-gradient(135deg, #F8FAFC, #FFFFFF);
+      border: 1px solid #E2E8F0;
+    }
+
+    /* Timeline */
+    .timeline-dot {
+      width: 14px; height: 14px;
+      background: var(--gradient);
+      border-radius: 50%;
+      border: 3px solid #F1F5F9;
+      flex-shrink: 0;
+      margin-top: 4px;
+    }
+
+    /* Mobile menu */
+    #mobileMenu {
+      display: none;
+      position: fixed;
+      top: 70px; left: 0; right: 0;
+      background: rgba(255,255,255,0.98);
+      backdrop-filter: blur(12px);
+      z-index: 9998;
+      padding: 1.5rem 5%;
+      border-bottom: 1px solid rgba(14,165,233,0.2);
+    }
+    #mobileMenu.open { display: block; animation: slideUp 0.3s ease; }
+
+    /* Tech badge */
+    .tech-badge {
+      background: #fff;
+      border: 1px solid #E2E8F0;
+      border-radius: 8px;
+      padding: 10px 14px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 500;
+      color: #64748B;
+      transition: all 0.3s ease;
+      cursor: default;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    .tech-badge:hover {
+      background: #F0F9FF;
+      border-color: var(--primary);
+      color: #0EA5E9;
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(14,165,233,0.15);
+    }
+
+    /* Service card */
+    .service-card {
+      background: #fff;
+      border: 1px solid #E2E8F0;
+      border-radius: 16px;
+      padding: 2rem;
+      transition: all 0.4s ease;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+    }
+    .service-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-8px);
+      box-shadow: 0 15px 40px rgba(14,165,233,0.15);
+    }
+
+    /* Social icon */
+    .social-icon {
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      border: 1px solid #E2E8F0;
+      display: flex; align-items: center; justify-content: center;
+      color: #64748B;
+      font-size: 16px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    .social-icon:hover {
+      border-color: var(--primary);
+      background: #F0F9FF;
+      color: #0EA5E9;
+      transform: scale(1.1);
+    }
+
+    /* Filter button */
+    .filter-btn {
+      padding: 8px 20px;
+      border-radius: 999px;
+      border: 1px solid #CBD5E1;
+      background: #fff;
+      color: #64748B;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .filter-btn:hover, .filter-btn.active {
+      background: var(--gradient);
+      border-color: transparent;
+      color: #fff;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #F1F5F9; }
+    ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 3px; }
+
+    /* Gradient animated heading bg */
+    .animated-gradient-bg {
+      background: linear-gradient(270deg, #0EA5E9, #6366F1, #0EA5E9);
+      background-size: 300% 300%;
+      animation: gradientShift 4s ease infinite;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    @media (max-width: 768px) {
+      #hero { background-attachment: scroll; }
+      .modal-box { padding: 1.5rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Custom Cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-dot" id="cursorDot"></div>
+
+<!-- Toast Notification -->
+<div id="toast">
+  <i class="fa-solid fa-circle-check"></i>
+  <span id="toastMsg">Message sent successfully! 🎉</span>
+</div>
+
+<!-- ===================== NAVBAR ===================== -->
+<nav id="navbar">
+  <div class="flex items-center justify-between w-full">
+    <!-- Logo -->
+    <a href="#hero" class="flex items-center gap-3">
+      <img src="logo.png" alt="knai Developer Logo" style="height:100px; filter: drop-shadow(0 0 8px rgba(14,165,233,0.5));"
+           onerror="this.style.display='none'" />
+    </a>
+
+    <!-- Desktop Nav -->
+    <div class="hidden md:flex items-center gap-8">
+      <a href="#hero" class="nav-link active">Home</a>
+      <a href="#about" class="nav-link">About</a>
+      <a href="#skills" class="nav-link">Skills</a>
+      <a href="#projects" class="nav-link">Projects</a>
+      <a href="#faq" class="nav-link">FAQ</a>
+      <a href="#contact" class="nav-link">Contact</a>
+    </div>
+
+    <div class="flex items-center gap-4">
+      <button onclick="openModal()" class="btn-gradient hidden md:block px-6 py-2 rounded-full font-poppins font-600 text-sm">
+        <i class="fa-brands fa-whatsapp mr-2"></i>Hire Me
+      </button>
+      <!-- Hamburger -->
+      <button id="hamburger" class="md:hidden text-white text-xl p-2" aria-label="Toggle menu">
+        <i class="fa-solid fa-bars" id="hamburgerIcon"></i>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div id="mobileMenu">
+  <div class="flex flex-col gap-5">
+    <a href="#hero" class="nav-link text-base" onclick="closeMobileMenu()">Home</a>
+    <a href="#about" class="nav-link text-base" onclick="closeMobileMenu()">About</a>
+    <a href="#skills" class="nav-link text-base" onclick="closeMobileMenu()">Skills</a>
+    <a href="#projects" class="nav-link text-base" onclick="closeMobileMenu()">Projects</a>
+    <a href="#faq" class="nav-link text-base" onclick="closeMobileMenu()">FAQ</a>
+    <a href="#contact" class="nav-link text-base" onclick="closeMobileMenu()">Contact</a>
+    <button onclick="openModal(); closeMobileMenu();" class="btn-gradient px-6 py-3 rounded-full font-poppins font-semibold text-sm w-fit">
+      <i class="fa-brands fa-whatsapp mr-2"></i>Hire Me
+    </button>
+  </div>
+</div>
+
+<!-- ===================== HERO ===================== -->
+<section id="hero">
+  <div class="hero-content w-full px-6 md:px-16 lg:px-24 py-32 grid lg:grid-cols-2 gap-12 items-center max-w-7xl mx-auto">
+    <!-- Left -->
+    <div style="animation: slideUp 0.8s ease forwards;">
+      <!-- Badge -->
+        <div class="inline-flex items-center gap-2 border border-primary px-4 py-2 rounded-full mb-6" style="animation-delay:0.2s; background:rgba(14,165,233,0.06);">
+          <span class="w-2 h-2 bg-primary rounded-full pulse-ring"></span>
+          <span class="text-primary text-sm font-medium">⚡ Available for Freelance</span>
+        </div>
+
+      <p class="font-poppins font-700 mb-2" style="font-size:clamp(1.5rem,3vw,2rem); color:#1E293B;">Hello, I'm</p>
+      <h1 class="font-poppins font-extrabold animated-gradient-bg mb-4" style="font-size:clamp(2.5rem,6vw,5rem); line-height:1.1;">
+        knai Developer
+      </h1>
+
+      <!-- Typewriter -->
+      <div class="flex items-center gap-2 mb-6" style="font-size:1.3rem; color:#6366F1; font-weight:600; font-family:'Poppins',sans-serif;">
+        <span id="typewriter"></span>
+      </div>
+
+      <p class="italic mb-3" style="color:#64748B; font-size:1.05rem; max-width:500px;">
+        "creative beautiful, responsive &amp; userfriendly website"
+      </p>
+      <p class="mb-8" style="color:#475569; font-size:0.95rem; max-width:600px; line-height:1.8;">
+        Hello! I'm knai Developer, a passionate Frontend Web Developer with 3 years of experience in crafting intuitive and visually appealing user interfaces. With a solid background in HTML, CSS, JavaScript, TypeScript and modern frontend frameworks like Next.js, I strive to create seamless and responsive web experiences.
+      </p>
+
+      <!-- Buttons -->
+      <div class="flex flex-wrap gap-4 mb-8">
+        <a href="#projects" class="btn-gradient px-8 py-4 rounded-full font-poppins font-semibold text-base">
+          View My Work <i class="fa-solid fa-arrow-down ml-2"></i>
+        </a>
+        <!-- <a href="cv.pdf" download class="btn-outline px-8 py-4 rounded-full font-poppins font-semibold text-base">
+          Download CV <i class="fa-solid fa-download ml-2"></i>
+        </a> -->
+      </div>
+
+      <!-- Socials -->
+      <div class="flex items-center gap-3 mb-10">
+        <a href="#" class="social-icon" aria-label="YouTube" style="color:#FF0000; border-color:#E2E8F0;"><i class="fa-brands fa-youtube"></i></a>
+        <a href="#" class="social-icon" aria-label="Facebook" style="color:#1877F2; border-color:#E2E8F0;"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="#" class="social-icon" aria-label="Instagram" style="color:#E4405F; border-color:#E2E8F0;"><i class="fa-brands fa-instagram"></i></a>
+        <a href="https://wa.me/923186346964" target="_blank" class="social-icon" aria-label="WhatsApp" style="color:#25D366; border-color:#E2E8F0;"><i class="fa-brands fa-whatsapp"></i></a>
+      </div>
+    </div>
+
+    <!-- Right — Profile -->
+    <div class="flex flex-col items-center gap-8">
+      <div class="relative" style="width:280px; height:280px;">
+        <!-- Spinning ring -->
+        <div class="absolute inset-0 rounded-full spin-slow" style="background: conic-gradient(from 0deg, #0EA5E9, #6366F1, #0EA5E9); padding:4px; border-radius:50%;">
+          <div style="background:#F8FAFC; width:100%; height:100%; border-radius:50%;"></div>
+        </div>
+        <img src="about.png" alt="knai Developer"
+             onerror="this.src='https://ui-avatars.com/api/?name=knai+Developer&size=280&background=6C63FF&color=fff&font-size=0.4'"
+             style="position:absolute; inset:8px; width:calc(100% - 16px); height:calc(100% - 16px); object-fit:cover; border-radius:50%;" />
+        <!-- Floating tech badges -->
+        <div class="float-anim" style="position:absolute; top:-10px; right:-20px; background:#fff; border:1px solid rgba(14,165,233,0.4); padding:8px 14px; border-radius:10px; font-size:12px; font-weight:600; color:var(--primary); box-shadow:0 4px 12px rgba(0,0,0,0.06);">
+          Next.js
+        </div>
+        <div class="float-slow" style="position:absolute; bottom:10px; right:-30px; background:#fff; border:1px solid rgba(245,158,11,0.4); padding:8px 14px; border-radius:10px; font-size:12px; font-weight:600; color:var(--secondary); box-shadow:0 4px 12px rgba(0,0,0,0.06);">
+          <i class="fa-brands fa-js mr-1"></i>JS
+        </div>
+        <div class="float-anim" style="position:absolute; bottom:-10px; left:-20px; background:#fff; border:1px solid rgba(14,165,233,0.4); padding:8px 14px; border-radius:10px; font-size:12px; font-weight:600; color:#E34F26; animation-delay:1s; box-shadow:0 4px 12px rgba(0,0,0,0.06);">
+          <i class="fa-brands fa-html5 mr-1"></i>HTML5
+        </div>
+        <div class="float-slow" style="position:absolute; top:20px; left:-30px; background:#fff; border:1px solid rgba(14,165,233,0.4); padding:8px 14px; border-radius:10px; font-size:12px; font-weight:600; color:#1572B6; animation-delay:0.5s; box-shadow:0 4px 12px rgba(0,0,0,0.06);">
+          <i class="fa-brands fa-css3-alt mr-1"></i>CSS3
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="grid grid-cols-2 gap-6 w-full max-w-xs">
+        <div class="stat-item" style="background:#fff; border:1px solid #E2E8F0; border-radius:14px; padding:1.2rem; box-shadow:0 2px 10px rgba(0,0,0,0.04);">
+          <div class="stat-number" data-target="50">0</div>
+          <div style="color:#64748B; font-size:12px; margin-top:4px;">Projects Done</div>
+        </div>
+        <div class="stat-item" style="background:#fff; border:1px solid #E2E8F0; border-radius:14px; padding:1.2rem; box-shadow:0 2px 10px rgba(0,0,0,0.04);">
+          <div class="stat-number" data-target="3">0</div>
+          <div style="color:#64748B; font-size:12px; margin-top:4px;">Years Exp.</div>
+        </div>
+        <div class="stat-item" style="background:#fff; border:1px solid #E2E8F0; border-radius:14px; padding:1.2rem; box-shadow:0 2px 10px rgba(0,0,0,0.04);">
+          <div class="stat-number" data-target="30">0</div>
+          <div style="color:#64748B; font-size:12px; margin-top:4px;">Happy Clients</div>
+        </div>
+        <div class="stat-item" style="background:#fff; border:1px solid #E2E8F0; border-radius:14px; padding:1.2rem; box-shadow:0 2px 10px rgba(0,0,0,0.04);">
+          <div class="stat-number" data-target="100">0</div>
+          <div style="color:#64748B; font-size:12px; margin-top:4px;">Satisfaction %</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 bounce-down" style="opacity:0.7;">
+    <span style="font-size:11px; color:var(--muted); letter-spacing:2px; text-transform:uppercase;">Scroll</span>
+    <i class="fa-solid fa-chevron-down" style="color:var(--primary); font-size:18px;"></i>
+  </div>
+</section>
+
+
+<!-- ===================== ABOUT ===================== -->
+<section id="about" style="background:var(--surface); padding:100px 0;">
+  <div class="max-w-7xl mx-auto px-6 md:px-12">
+    <div class="grid lg:grid-cols-2 gap-16 items-center">
+      <!-- Image -->
+      <div class="reveal-left relative flex justify-center">
+        <div class="relative" style="width:fit-content;">
+          <img src="about.png" alt="knai Developer"
+               onerror="this.src='https://ui-avatars.com/api/?name=knai+Developer&size=400&background=6C63FF&color=fff'"
+               style="width:100%; max-width:400px; border-radius:20px; border:3px solid transparent;
+                      background: linear-gradient(var(--surface),var(--surface)) padding-box, var(--gradient) border-box;
+                      display:block;" />
+          <!-- Corner decoration -->
+          <div style="position:absolute; top:-18px; left:-18px; font-size:2.5rem; font-family:'Poppins',sans-serif; font-weight:800;" class="gradient-text">&lt;/&gt;</div>
+          <!-- Experience badge -->
+          <div style="position:absolute; bottom:-16px; right:-16px; background:var(--gradient); padding:12px 20px; border-radius:14px; font-family:'Poppins',sans-serif; font-weight:700; font-size:13px;">
+            3 Years<br><span style="font-size:11px; font-weight:400;">Experience</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Text -->
+      <div class="reveal-right">
+        <span class="section-label">— About Me</span>
+        <h2 class="section-title mb-6">Crafting Digital Experiences<br><span class="gradient-text">That Matter</span></h2>
+        <p style="color:var(--muted); line-height:1.85; margin-bottom:1.2rem;">
+          <strong style="color:#1E293B;">Frontend Excellence:</strong> I specialize in responsive design, performance optimization, cross-browser compatibility, and UI/UX design to deliver exceptional user experiences.
+        </p>
+        <p style="color:var(--muted); line-height:1.85; margin-bottom:2rem;">
+          I am always excited to learn new technologies and keep up with industry trends. Looking forward to creating something amazing with you!
+        </p>
+
+        <!-- Info grid -->
+        <div class="grid grid-cols-2 gap-4 mb-8">
+          <div><span style="color:var(--muted); font-size:13px;">Name</span><p style="font-weight:600;">knai Developer</p></div>
+          <div><span style="color:var(--muted); font-size:13px;">Experience</span><p style="font-weight:600;">3 Years</p></div>
+          <div><span style="color:var(--muted); font-size:13px;">Location</span><p style="font-weight:600;">Pakistan</p></div>
+          <div><span style="color:var(--muted); font-size:13px;">Availability</span><p class="gradient-text font-semibold">Open to Work</p></div>
+          <div><span style="color:var(--muted); font-size:13px;">Email</span><p style="font-weight:600;">arshmanedu123@gmail.com</p></div>
+          <div><span style="color:var(--muted); font-size:13px;">Freelance</span><p class="gradient-text font-semibold">Available</p></div>
+        </div>
+
+        <div class="flex flex-wrap gap-4">
+          <button onclick="openModal()" class="btn-gradient px-8 py-3 rounded-full font-poppins font-semibold">
+            <i class="fa-brands fa-whatsapp mr-2"></i>Hire Me
+          </button>
+          <!-- <a href="cv.pdf" download class="btn-outline px-8 py-3 rounded-full font-poppins font-semibold">
+            <i class="fa-solid fa-download mr-2"></i>Download CV
+          </a> -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Timeline -->
+    <div class="mt-24 reveal">
+      <h3 class="font-poppins font-700 text-2xl text-center mb-12">My <span class="gradient-text">Journey</span></h3>
+      <div class="relative">
+        <div style="position:absolute; left:50%; top:0; bottom:0; width:2px; background:linear-gradient(to bottom,var(--primary),var(--secondary)); transform:translateX(-50%);" class="hidden md:block"></div>
+        <div class="flex flex-col gap-8">
+          <!-- Timeline items alternating -->
+          <div class="grid md:grid-cols-2 gap-4 items-center">
+            <div class="md:text-right md:pr-10">
+              <div style="background:#fff; border:1px solid #E2E8F0; border-radius:14px; padding:1.2rem 1.5rem; display:inline-block; text-align:left; box-shadow:0 2px 10px rgba(0,0,0,0.04);">
+                <div class="gradient-text font-poppins font-bold text-lg">2021</div>
+                <div class="font-semibold" style="color:#1E293B;">Started Web Development</div>
+                <div style="color:#64748B; font-size:13px; margin-top:4px;">Began with HTML, CSS & JavaScript fundamentals</div>
+              </div>
+            </div>
+            <div class="hidden md:block"></div>
+          </div>
+          <div class="grid md:grid-cols-2 gap-4 items-center">
+            <div class="hidden md:block"></div>
+            <div class="md:pl-10">
+              <div style="background:#fff; border:1px solid #E2E8F0; border-radius:14px; padding:1.2rem 1.5rem; display:inline-block; box-shadow:0 2px 10px rgba(0,0,0,0.04);">
+                <div class="gradient-text font-poppins font-bold text-lg">2022</div>
+                <div class="font-semibold" style="color:#1E293B;">First Freelance Projects</div>
+                <div style="color:#64748B; font-size:13px; margin-top:4px;">Started delivering client websites professionally</div>
+              </div>
+            </div>
+          </div>
+          <div class="grid md:grid-cols-2 gap-4 items-center">
+            <div class="md:text-right md:pr-10">
+              <div style="background:#fff; border:1px solid #E2E8F0; border-radius:14px; padding:1.2rem 1.5rem; display:inline-block; text-align:left; box-shadow:0 2px 10px rgba(0,0,0,0.04);">
+                <div class="gradient-text font-poppins font-bold text-lg">2023</div>
+                <div class="font-semibold" style="color:#1E293B;">Advanced React & Next.js</div>
+                <div style="color:#64748B; font-size:13px; margin-top:4px;">Mastered modern frontend frameworks</div>
+              </div>
+            </div>
+            <div class="hidden md:block"></div>
+          </div>
+          <div class="grid md:grid-cols-2 gap-4 items-center">
+            <div class="hidden md:block"></div>
+            <div class="md:pl-10">
+              <div style="background:#fff; border:1px solid #E2E8F0; border-radius:14px; padding:1.2rem 1.5rem; display:inline-block; box-shadow:0 2px 10px rgba(0,0,0,0.04);">
+                <div class="gradient-text font-poppins font-bold text-lg">2024</div>
+                <div class="font-semibold" style="color:#1E293B;">Full Stack & TypeScript</div>
+                <div style="color:#64748B; font-size:13px; margin-top:4px;">Expanded into TypeScript and full-stack development</div>
+              </div>
+            </div>
+          </div>
+          <div class="grid md:grid-cols-2 gap-4 items-center">
+            <div class="md:text-right md:pr-10">
+              <div style="background:#fff; border:1px solid rgba(245,158,11,0.3); border-radius:14px; padding:1.2rem 1.5rem; display:inline-block; text-align:left; box-shadow:0 2px 10px rgba(0,0,0,0.04);">
+                <div class="gradient-text font-poppins font-bold text-lg">2025</div>
+                <div class="font-semibold" style="color:#1E293B;">50+ Projects Completed</div>
+                <div style="color:#64748B; font-size:13px; margin-top:4px;">Reached major milestone with diverse client portfolio</div>
+              </div>
+            </div>
+            <div class="hidden md:block"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SKILLS ===================== -->
+<section id="skills" style="background:var(--dark); padding:100px 0;">
+  <div class="max-w-7xl mx-auto px-6 md:px-12">
+    <div class="text-center mb-16 reveal">
+      <span class="section-label">— My Expertise</span>
+      <h2 class="section-title">Skills &amp; <span class="gradient-text">Technologies</span></h2>
+      <p style="color:var(--muted); margin-top:1rem; max-width:500px; margin-left:auto; margin-right:auto;">Technologies I work with to build amazing products</p>
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-16 mb-20">
+      <!-- Skill Bars -->
+      <div class="reveal-left">
+        <h3 class="font-poppins font-600 text-xl mb-8">Technical <span class="gradient-text">Proficiency</span></h3>
+        <div class="flex flex-col gap-6" id="skillBars">
+          <div class="skill-item">
+            <div class="flex justify-between mb-2">
+              <span style="font-weight:500; font-size:14px;"><i class="fa-brands fa-html5 mr-2" style="color:#E34F26;"></i>HTML5</span>
+              <span class="gradient-text font-semibold text-sm">95%</span>
+            </div>
+            <div class="skill-bar-bg">
+              <div class="skill-bar-fill" data-width="95"></div>
+            </div>
+          </div>
+          <div class="skill-item">
+            <div class="flex justify-between mb-2">
+              <span style="font-weight:500; font-size:14px;"><i class="fa-brands fa-css3-alt mr-2" style="color:#1572B6;"></i>CSS3 / Tailwind</span>
+              <span class="gradient-text font-semibold text-sm">92%</span>
+            </div>
+            <div class="skill-bar-bg">
+              <div class="skill-bar-fill" data-width="92"></div>
+            </div>
+          </div>
+          <div class="skill-item">
+            <div class="flex justify-between mb-2">
+              <span style="font-weight:500; font-size:14px;"><i class="fa-brands fa-js mr-2" style="color:#F7DF1E;"></i>JavaScript</span>
+              <span class="gradient-text font-semibold text-sm">88%</span>
+            </div>
+            <div class="skill-bar-bg">
+              <div class="skill-bar-fill" data-width="88"></div>
+            </div>
+          </div>
+          <div class="skill-item">
+            <div class="flex justify-between mb-2">
+              <span style="font-weight:500; font-size:14px;"><i class="fa-solid fa-code mr-2" style="color:#3178C6;"></i>TypeScript</span>
+              <span class="gradient-text font-semibold text-sm">80%</span>
+            </div>
+            <div class="skill-bar-bg">
+              <div class="skill-bar-fill" data-width="80"></div>
+            </div>
+          </div>
+          <!-- <div class="skill-item">
+            <div class="flex justify-between mb-2">
+              <span style="font-weight:500; font-size:14px;"><i class="fa-brands fa-react mr-2" style="color:#61DAFB;"></i>React.js</span>
+              <span class="gradient-text font-semibold text-sm">85%</span>
+            </div>
+            <div class="skill-bar-bg">
+              <div class="skill-bar-fill" data-width="85"></div>
+            </div>
+          </div> -->
+          <div class="skill-item">
+            <div class="flex justify-between mb-2">
+              <span style="font-weight:500; font-size:14px;">
+                <!-- <i class="fa-solid fa-n mr-2" style="color:#fff;"></i> -->
+                Next.js</span>
+              <span class="gradient-text font-semibold text-sm">78%</span>
+            </div>
+            <div class="skill-bar-bg">
+              <div class="skill-bar-fill" data-width="78"></div>
+            </div>
+          </div>
+          <div class="skill-item">
+            <div class="flex justify-between mb-2">
+              <span style="font-weight:500; font-size:14px;"><i class="fa-brands fa-git-alt mr-2" style="color:#F05032;"></i>Git / GitHub</span>
+              <span class="gradient-text font-semibold text-sm">90%</span>
+            </div>
+            <div class="skill-bar-bg">
+              <div class="skill-bar-fill" data-width="90"></div>
+            </div>
+          </div>
+          <div class="skill-item">
+            <div class="flex justify-between mb-2">
+              <span style="font-weight:500; font-size:14px;"><i class="fa-solid fa-palette mr-2" style="color:#F59E0B;"></i>Figma / UI/UX</span>
+              <span class="gradient-text font-semibold text-sm">75%</span>
+            </div>
+            <div class="skill-bar-bg">
+              <div class="skill-bar-fill" data-width="75"></div>
+            </div>
+          </div>
+          <div class="skill-item">
+            <div class="flex justify-between mb-2">
+              <span style="font-weight:500; font-size:14px;"><i class="fa-solid fa-robot mr-2" style="color:#6C63FF;"></i>Claude Code</span>
+              <span class="gradient-text font-semibold text-sm">90%</span>
+            </div>
+            <div class="skill-bar-bg">
+              <div class="skill-bar-fill" data-width="90"></div>
+            </div>
+          </div>
+          <div class="skill-item">
+            <div class="flex justify-between mb-2">
+              <span style="font-weight:500; font-size:14px;"><i class="fa-brands fa-openai mr-2" style="color:#412991;"></i>OpenAI SDK</span>
+              <span class="gradient-text font-semibold text-sm">85%</span>
+            </div>
+            <div class="skill-bar-bg">
+              <div class="skill-bar-fill" data-width="85"></div>
+            </div>
+          </div>
+          <div class="skill-item">
+            <div class="flex justify-between mb-2">
+              <span style="font-weight:500; font-size:14px;"><i class="fa-brands fa-python mr-2" style="color:#3776AB;"></i>Python</span>
+              <span class="gradient-text font-semibold text-sm">70%</span>
+            </div>
+            <div class="skill-bar-bg">
+              <div class="skill-bar-fill" data-width="80"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tech Badges -->
+      <div class="reveal-right">
+        <h3 class="font-poppins font-600 text-xl mb-8">Tech <span class="gradient-text">Stack</span></h3>
+        <div class="grid grid-cols-3 gap-3">
+          <div class="tech-badge"><i class="fa-brands fa-html5 text-2xl block mb-2" style="color:#E34F26;"></i>HTML5</div>
+          <div class="tech-badge"><i class="fa-brands fa-css3-alt text-2xl block mb-2" style="color:#1572B6;"></i>CSS3</div>
+          <div class="tech-badge"><i class="fa-brands fa-js text-2xl block mb-2" style="color:#F7DF1E;"></i>JavaScript</div>
+          <div class="tech-badge"><i class="fa-solid fa-code text-2xl block mb-2" style="color:#3178C6;"></i>TypeScript</div>
+          <!-- <div class="tech-badge"><i class="fa-brands fa-react text-2xl block mb-2" style="color:#61DAFB;"></i>React</div> -->
+          <div class="tech-badge"><i class="fa-solid fa-n text-2xl block mb-2"></i>Next.js</div>
+          <div class="tech-badge"><i class="fa-solid fa-wind text-2xl block mb-2" style="color:#38BDF8;"></i>Tailwind</div>
+          <!-- <div class="tech-badge"><i class="fa-brands fa-sass text-2xl block mb-2" style="color:#CC6699;"></i>SASS</div> -->
+          <div class="tech-badge"><i class="fa-brands fa-node-js text-2xl block mb-2" style="color:#6DA55F;"></i>Node.js</div>
+          <div class="tech-badge"><i class="fa-brands fa-git-alt text-2xl block mb-2" style="color:#F05032;"></i>Git</div>
+          <div class="tech-badge"><i class="fa-solid fa-pen-ruler text-2xl block mb-2" style="color:#F59E0B;"></i>Figma</div>
+          <div class="tech-badge"><i class="fa-solid fa-laptop-code text-2xl block mb-2" style="color:#007ACC;"></i>VS Code</div>
+          <div class="tech-badge"><i class="fa-solid fa-robot text-2xl block mb-2" style="color:#6C63FF;"></i>Claude Code</div>
+          <div class="tech-badge"><i class="fa-brands fa-openai text-2xl block mb-2" style="color:#412991;"></i>OpenAI SDK</div>
+          <div class="tech-badge"><i class="fa-brands fa-python text-2xl block mb-2" style="color:#3776AB;"></i>Python</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Services -->
+    <div class="reveal">
+      <h3 class="font-poppins font-700 text-2xl text-center mb-10">What I <span class="gradient-text">Offer</span></h3>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="service-card">
+          <div style="font-size:2.5rem; margin-bottom:1rem;" class="gradient-text"><i class="fa-solid fa-palette"></i></div>
+          <h4 class="font-poppins font-600 text-lg mb-2">UI/UX Design</h4>
+          <p style="color:var(--muted); font-size:14px; line-height:1.7;">Creating intuitive, beautiful interfaces users love</p>
+          <a href="#contact" style="color:var(--primary); font-size:13px; font-weight:500; margin-top:1rem; display:inline-block;">Learn More →</a>
+        </div>
+        <div class="service-card">
+          <div style="font-size:2.5rem; margin-bottom:1rem;" class="gradient-text"><i class="fa-solid fa-laptop-code"></i></div>
+          <h4 class="font-poppins font-600 text-lg mb-2">Frontend Dev</h4>
+          <p style="color:var(--muted); font-size:14px; line-height:1.7;">Clean, fast, responsive code with modern frameworks</p>
+          <a href="#contact" style="color:var(--primary); font-size:13px; font-weight:500; margin-top:1rem; display:inline-block;">Learn More →</a>
+        </div>
+        <div class="service-card">
+          <div style="font-size:2.5rem; margin-bottom:1rem;" class="gradient-text"><i class="fa-solid fa-mobile-screen"></i></div>
+          <h4 class="font-poppins font-600 text-lg mb-2">Mobile Responsive</h4>
+          <p style="color:var(--muted); font-size:14px; line-height:1.7;">Perfect experience on every device and screen size</p>
+          <a href="#contact" style="color:var(--primary); font-size:13px; font-weight:500; margin-top:1rem; display:inline-block;">Learn More →</a>
+        </div>
+        <div class="service-card">
+          <div style="font-size:2.5rem; margin-bottom:1rem;" class="gradient-text"><i class="fa-solid fa-bolt"></i></div>
+          <h4 class="font-poppins font-600 text-lg mb-2">Performance</h4>
+          <p style="color:var(--muted); font-size:14px; line-height:1.7;">Lightning-fast websites with optimized code</p>
+          <a href="#contact" style="color:var(--primary); font-size:13px; font-weight:500; margin-top:1rem; display:inline-block;">Learn More →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PROJECTS ===================== -->
+<section id="projects" style="background:var(--surface); padding:100px 0;">
+  <div class="max-w-7xl mx-auto px-6 md:px-12">
+    <div class="text-center mb-12 reveal">
+      <span class="section-label">— Portfolio</span>
+      <h2 class="section-title">My Recent <span class="gradient-text">Projects</span></h2>
+      <p style="color:var(--muted); margin-top:1rem;">A selection of my finest work</p>
+    </div>
+
+    <!-- Filter buttons -->
+    <div class="flex flex-wrap justify-center gap-3 mb-12 reveal">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="uiux">UI/UX</button>
+      <button class="filter-btn" data-filter="html">HTML/CSS/JS</button>
+      <button class="filter-btn" data-filter="nextjs">Next.js</button>
+      <button class="filter-btn" data-filter="python">Python</button>
+      <button class="filter-btn" data-filter="agentic">Agentic AI</button>
+    </div>
+
+    <!-- Project Grid -->
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8" id="projectsGrid">
+<!--  -->
+<!-- Shoes E-commerce Website -->
+<div class="project-card reveal" data-category="html">
+  <div class="project-img-wrap">
+    <img src="shoes.jpg" alt="Shoes Website"
+         onerror="this.src='https://placehold.co/600x340/111827/0EA5E9?text=Shoes+Website'" />
+    <div class="project-overlay">
+      <div class="flex gap-2 flex-wrap mb-3">
+        <span style="background:rgba(227,79,38,0.85); color:#fff; font-size:11px; padding:3px 10px; border-radius:999px;">HTML5</span>
+        <span style="background:rgba(21,114,182,0.85); color:#fff; font-size:11px; padding:3px 10px; border-radius:999px;">CSS3</span>
+        <span style="background:rgba(247,223,30,0.85); color:#000; font-size:11px; padding:3px 10px; border-radius:999px;">JS</span>
+      </div>
+      <div class="flex gap-3">
+        <a href="https://knai-shoes.vercel.app/" target="_blank" style="background:var(--primary); color:#fff; padding:8px 16px; border-radius:8px; font-size:12px; font-weight:600; text-decoration:none;">Live Demo ↗</a>
+      </div>
+    </div>
+  </div>
+  <div style="padding:1.5rem;">
+    <span style="background:rgba(14,165,233,0.1); color:var(--primary); font-size:11px; padding:4px 12px; border-radius:999px; font-weight:600; border:1px solid rgba(14,165,233,0.25);">👟 Shoes Store</span>
+    <h4 class="font-poppins font-semibold text-lg mt-3 mb-2">Shoes E-commerce Website</h4>
+    <p style="color:var(--muted); font-size:13px; line-height:1.6;">A modern shoes e-commerce website with product showcase, responsive design, and smooth UI experience.</p>
+    <div class="flex flex-wrap gap-2 mt-3">
+      <span style="background:rgba(227,79,38,0.1); color:#E34F26; font-size:11px; padding:3px 10px; border-radius:6px; border:1px solid rgba(227,79,38,0.2);">HTML5</span>
+      <span style="background:rgba(21,114,182,0.1); color:#38BDF8; font-size:11px; padding:3px 10px; border-radius:6px; border:1px solid rgba(21,114,182,0.2);">CSS3</span>
+      <span style="background:rgba(247,223,30,0.08); color:#b8a800; font-size:11px; padding:3px 10px; border-radius:6px; border:1px solid rgba(247,223,30,0.18);">JavaScript</span>
+    </div>
+  </div>
+</div>
+
+<!--  -->
+      <div class="project-card reveal" data-category="html">
+        <div class="project-img-wrap">
+          <img src="project1.png" alt="Wooden Decor Website"
+               onerror="this.src='https://placehold.co/600x340/111827/0EA5E9?text=Wooden+Decor'" />
+          <div class="project-overlay">
+            <div class="flex gap-2 flex-wrap mb-3">
+              <span style="background:rgba(227,79,38,0.85); color:#fff; font-size:11px; padding:3px 10px; border-radius:999px;">HTML5</span>
+              <span style="background:rgba(21,114,182,0.85); color:#fff; font-size:11px; padding:3px 10px; border-radius:999px;">CSS3</span>
+              <span style="background:rgba(56,189,248,0.85); color:#fff; font-size:11px; padding:3px 10px; border-radius:999px;">Tailwind</span>
+            </div>
+            <div class="flex gap-3">
+              <a href="https://wooden-decor.vercel.app/" target="_blank" style="background:var(--primary); color:#fff; padding:8px 16px; border-radius:8px; font-size:12px; font-weight:600; text-decoration:none;">Live Demo ↗</a>
+              <!-- <a href="#" style="border:1px solid rgba(255,255,255,0.3); color:#fff; padding:8px 16px; border-radius:8px; font-size:12px; font-weight:600; text-decoration:none;">Source ↗</a> -->
+            </div>
+          </div>
+        </div>
+        <div style="padding:1.5rem;">
+          <span style="background:rgba(14,165,233,0.1); color:var(--primary); font-size:11px; padding:4px 12px; border-radius:999px; font-weight:600; border:1px solid rgba(14,165,233,0.25);">🪵 Wooden Decor</span>
+          <h4 class="font-poppins font-semibold text-lg mt-3 mb-2">Wooden Decor Website</h4>
+          <p style="color:var(--muted); font-size:13px; line-height:1.6;">A premium e-commerce site for wooden home decor — elegant UI, smooth animations, fully responsive with product showcase.</p>
+          <div class="flex flex-wrap gap-2 mt-3">
+            <span style="background:rgba(227,79,38,0.1); color:#E34F26; font-size:11px; padding:3px 10px; border-radius:6px; border:1px solid rgba(227,79,38,0.2);"><i class="fa-brands fa-html5 mr-1"></i>HTML5</span>
+            <span style="background:rgba(21,114,182,0.1); color:#38BDF8; font-size:11px; padding:3px 10px; border-radius:6px; border:1px solid rgba(21,114,182,0.2);"><i class="fa-brands fa-css3-alt mr-1"></i>CSS3</span>
+            <span style="background:rgba(247,223,30,0.08); color:#b8a800; font-size:11px; padding:3px 10px; border-radius:6px; border:1px solid rgba(247,223,30,0.18);"><i class="fa-brands fa-js mr-1"></i>JavaScript</span>
+            <span style="background:rgba(56,189,248,0.1); color:#38BDF8; font-size:11px; padding:3px 10px; border-radius:6px; border:1px solid rgba(56,189,248,0.2);">Tailwind CSS</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card reveal" data-category="python">
+        <div class="project-img-wrap">
+          <img src="python-qrcode.jpg" alt="Python Web Scraper"
+               onerror="this.src='https://placehold.co/600x340/111827/3776AB?text=Python+Project'" />
+          <div class="project-overlay">
+            <div class="flex gap-2 flex-wrap mb-3">
+              <span style="background:rgba(55,118,171,0.85); color:#fff; font-size:11px; padding:3px 10px; border-radius:999px;">Python</span>
+              <!-- <span style="background:rgba(14,165,233,0.85); color:#fff; font-size:11px; padding:3px 10px; border-radius:999px;"></span>
+              <span style="background:rgba(99,102,241,0.85); color:#fff; font-size:11px; padding:3px 10px; border-radius:999px;">API</span> -->
+            </div>
+            <div class="flex gap-3">
+              <a href="https://drive.google.com/file/d/1BvFwwsGEP2an2PMs_B5eAG2kPFPjf5sC/view?usp=sharing" target="_blank" style="background:var(--primary); color:#fff; padding:8px 16px; border-radius:8px; font-size:12px; font-weight:600; text-decoration:none;">Live Demo ↗</a>
+            </div>
+          </div>
+        </div>
+        <div style="padding:1.5rem;">
+          <span style="background:rgba(55,118,171,0.1); color:#3776AB; font-size:11px; padding:4px 12px; border-radius:999px; font-weight:600; border:1px solid rgba(55,118,171,0.25);">🐍 Python</span>
+          <h4 class="font-poppins font-semibold text-lg mt-3 mb-2">QR Code Generator</h4>
+          <p style="color:var(--muted); font-size:13px; line-height:1.6;">.</p>
+          <div class="flex flex-wrap gap-2 mt-3">
+            <span style="background:rgba(55,118,171,0.1); color:#3776AB; font-size:11px; padding:3px 10px; border-radius:6px; border:1px solid rgba(55,118,171,0.2);"><i class="fa-brands fa-python mr-1"></i>Python</span>
+            <span style="background:rgba(14,165,233,0.1); color:#38BDF8; font-size:11px; padding:3px 10px; border-radius:6px; border:1px solid rgba(14,165,233,0.2);">Flask</span>
+            <span style="background:rgba(99,102,241,0.1); color:#6366F1; font-size:11px; padding:3px 10px; border-radius:6px; border:1px solid rgba(99,102,241,0.2);">BeautifulSoup</span>
+            <span style="background:rgba(34,197,94,0.1); color:#22C55E; font-size:11px; padding:3px 10px; border-radius:6px; border:1px solid rgba(34,197,94,0.2);">Pandas</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card reveal" data-category="nextjs">
+        <div class="project-img-wrap">
+          <img src="project2.png" alt="Portfolio Website"
+               onerror="this.src='https://placehold.co/600x340/1A1A2E/F59E0B?text=Project+2'" />
+          <div class="project-overlay">
+            <div class="flex gap-2 flex-wrap mb-3">
+              <span style="background:rgba(108,99,255,0.8); color:#fff; font-size:11px; padding:3px 10px; border-radius:999px;">Next.js</span>
+              <span style="background:rgba(245,158,11,0.8); color:#fff; font-size:11px; padding:3px 10px; border-radius:999px;">TypeScript</span>
+            </div>
+            <div class="flex gap-3">
+              <a href="https://food-knai.vercel.app/" target="_blank" style="background:var(--primary); color:#fff; padding:8px 16px; border-radius:8px; font-size:12px; font-weight:600; text-decoration:none;">Live Demo ↗</a>
+              <!-- <a href="#" style="border:1px solid rgba(255,255,255,0.3); color:#fff; padding:8px 16px; border-radius:8px; font-size:12px; font-weight:600; text-decoration:none;">GitHub ↗</a> -->
+            </div>
+          </div>
+        </div>
+        <div style="padding:1.5rem;">
+          <span style="background:rgba(245,158,11,0.15); color:var(--secondary); font-size:11px; padding:4px 12px; border-radius:999px; font-weight:500;">Next.js</span>
+          <h4 class="font-poppins font-semibold text-lg mt-3 mb-2">Figma Food Project</h4>
+          <p style="color:var(--muted); font-size:13px; line-height:1.6;"> Created Modern Design figma project with next.js .</p>
+          <div class="flex flex-wrap gap-2 mt-3">
+            <span style="background:rgba(255,255,255,0.05); color:var(--muted); font-size:11px; padding:3px 10px; border-radius:6px;">Next.js</span>
+            <span style="background:rgba(255,255,255,0.05); color:var(--muted); font-size:11px; padding:3px 10px; border-radius:6px;">TypeScript</span>
+            <span style="background:rgba(255,255,255,0.05); color:var(--muted); font-size:11px; padding:3px 10px; border-radius:6px;">Framer</span>
+          </div>
+        </div>
+      </div>
+<!-- _____________________________ ui ux-->
+      <div class="project-card reveal" data-category="uiux">
+        <div class="project-img-wrap">
+          <video src="uiux1.mp4" controls autoplay muted loop style="width:100%; height:100%; object-fit:cover;">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+        <div style="padding:1.5rem;">
+          <span style="background:rgba(108,99,255,0.15); color:#6C63FF; font-size:11px; padding:4px 12px; border-radius:999px; font-weight:500;">UI/UX</span>
+          <h4 class="font-poppins font-semibold text-lg mt-3 mb-2">Project 1</h4>
+          <p style="color:var(--muted); font-size:13px; line-height:1.6;">UI/UX design project showcase.</p>
+        </div>
+      </div>
+        <!-- ___________________________ -->
+
+      <div class="project-card reveal" data-category="uiux">
+          <div class="project-img-wrap">
+            <video src="uiux2.mp4" controls autoplay muted loop style="width:100%; height:100%; object-fit:cover;">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <div style="padding:1.5rem;">
+            <span style="background:rgba(108,99,255,0.15); color:#6C63FF; font-size:11px; padding:4px 12px; border-radius:999px; font-weight:500;">UI/UX</span>
+            <h4 class="font-poppins font-semibold text-lg mt-3 mb-2">Project 2</h4>
+            <p style="color:var(--muted); font-size:13px; line-height:1.6;">UI/UX design project showcase.</p>
+          </div>
+      </div>
+<!-- ___________________________ -->
+<div class="project-card reveal" data-category="uiux">
+  <div class="project-img-wrap">
+    <video src="uiux3.mp4" controls autoplay muted loop style="width:100%; height:100%; object-fit:cover;">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+  <div style="padding:1.5rem;">
+    <span style="background:rgba(108,99,255,0.15); color:#6C63FF; font-size:11px; padding:4px 12px; border-radius:999px; font-weight:500;">UI/UX</span>
+    <h4 class="font-poppins font-semibold text-lg mt-3 mb-2">Project 3</h4>
+    <p style="color:var(--muted); font-size:13px; line-height:1.6;">UI/UX design project showcase.</p>
+  </div>
+</div>
+
+<!-- Agentic AI Project -->
+ <!-- agentic chat kit -->
+ <div class="project-card reveal" data-category="agentic">
+  <div class="project-img-wrap">
+    <video src="chatkit.mp4" controls autoplay muted loop style="width:100%; height:100%; object-fit:cover;">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+  <div style="padding:1.5rem;">
+    <span style="background:rgba(16,185,129,0.15); color:#10B981; font-size:11px; padding:4px 12px; border-radius:999px; font-weight:500;">Agentic AI</span>
+    <h4 class="font-poppins font-semibold text-lg mt-3 mb-2">ChatKit Gemini</h4>
+    <p style="color:var(--muted); font-size:13px; line-height:1.6;"> A modern chat application integrating Gemini AI to deliver real-time, intelligent conversations with a smooth user experience.  
+      Built with a focus on responsive UI and efficient API handling, enabling users to interact seamlessly with AI-powered features.</p>
+    <div class="flex flex-wrap gap-2 mt-3">
+      <span style="background:rgba(99,102,241,0.1); color:#6366F1; font-size:11px; padding:3px 10px; border-radius:6px; border:1px solid rgba(99,102,241,0.2);">OpenSDK</span>
+      <span style="background:rgba(16,185,129,0.1); color:#10B981; font-size:11px; padding:3px 10px; border-radius:6px; border:1px solid rgba(16,185,129,0.2);">Agentic AI</span>
+      <span style="background:rgba(14,165,233,0.1); color:#38BDF8; font-size:11px; padding:3px 10px; border-radius:6px; border:1px solid rgba(14,165,233,0.2);">Workflow</span>
+    </div>
+  </div>
+</div>
+<!-- 1 -->
+<div class="project-card reveal" data-category="agentic">
+  <div class="project-img-wrap">
+    <video src="agentic1.mp4" controls autoplay muted loop style="width:100%; height:100%; object-fit:cover;">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+  <div style="padding:1.5rem;">
+    <span style="background:rgba(16,185,129,0.15); color:#10B981; font-size:11px; padding:4px 12px; border-radius:999px; font-weight:500;">Agentic AI</span>
+    <h4 class="font-poppins font-semibold text-lg mt-3 mb-2">AI Agent Handoff System using OpenSDK</h4>
+    <p style="color:var(--muted); font-size:13px; line-height:1.6;">Implements structured agent-to-agent handoffs using OpenSDK with shared state, routing logic, and controlled execution transitions.</p>
+    <div class="flex flex-wrap gap-2 mt-3">
+      <span style="background:rgba(99,102,241,0.1); color:#6366F1; font-size:11px; padding:3px 10px; border-radius:6px; border:1px solid rgba(99,102,241,0.2);">OpenSDK</span>
+      <span style="background:rgba(16,185,129,0.1); color:#10B981; font-size:11px; padding:3px 10px; border-radius:6px; border:1px solid rgba(16,185,129,0.2);">Agentic AI</span>
+      <span style="background:rgba(14,165,233,0.1); color:#38BDF8; font-size:11px; padding:3px 10px; border-radius:6px; border:1px solid rgba(14,165,233,0.2);">Workflow</span>
+    </div>
+  </div>
+</div>
+<!-- 2 -->
+<div class="project-card reveal" data-category="agentic">
+  <div class="project-img-wrap">
+    <video src="agentic2.mp4" controls autoplay muted loop style="width:100%; height:100%; object-fit:cover;">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+  <div style="padding:1.5rem;">
+    <span style="background:rgba(16,185,129,0.15); color:#10B981; font-size:11px; padding:4px 12px; border-radius:999px; font-weight:500;">Agentic AI</span>
+    <h4 class="font-poppins font-semibold text-lg mt-3 mb-2">Arithmetic Agent</h4>
+    <p style="color:var(--muted); font-size:13px; line-height:1.6;">A focused arithmetic agent that solves math problems using tools and step-by-step reasoning with reliable outputs.</p>
+    <div class="flex flex-wrap gap-2 mt-3">
+      <span style="background:rgba(99,102,241,0.1); color:#6366F1; font-size:11px; padding:3px 10px; border-radius:6px; border:1px solid rgba(99,102,241,0.2);">OpenSDK</span>
+      <span style="background:rgba(16,185,129,0.1); color:#10B981; font-size:11px; padding:3px 10px; border-radius:6px; border:1px solid rgba(16,185,129,0.2);">Agentic AI</span>
+      <span style="background:rgba(14,165,233,0.1); color:#38BDF8; font-size:11px; padding:3px 10px; border-radius:6px; border:1px solid rgba(14,165,233,0.2);">Workflow</span>
+    </div>
+  </div>
+</div>
+<!-- 3 -->
+<div class="project-card reveal" data-category="agentic">
+  <div class="project-img-wrap">
+    <video src="agentic3.mp4" controls autoplay muted loop style="width:100%; height:100%; object-fit:cover;">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+  <div style="padding:1.5rem;">
+    <span style="background:rgba(16,185,129,0.15); color:#10B981; font-size:11px; padding:4px 12px; border-radius:999px; font-weight:500;">Agentic AI</span>
+    <h4 class="font-poppins font-semibold text-lg mt-3 mb-2">Multi-Agent AI System using OpenAI's SDK</h4>
+    <p style="color:var(--muted); font-size:13px; line-height:1.6;">Built a multi-agent architecture with OpenAI SDK for delegation, tool use, and shared context across collaborating agents.</p>
+    <div class="flex flex-wrap gap-2 mt-3">
+      <span style="background:rgba(99,102,241,0.1); color:#6366F1; font-size:11px; padding:3px 10px; border-radius:6px; border:1px solid rgba(99,102,241,0.2);">OpenSDK</span>
+      <span style="background:rgba(16,185,129,0.1); color:#10B981; font-size:11px; padding:3px 10px; border-radius:6px; border:1px solid rgba(16,185,129,0.2);">Agentic AI</span>
+      <span style="background:rgba(14,165,233,0.1); color:#38BDF8; font-size:11px; padding:3px 10px; border-radius:6px; border:1px solid rgba(14,165,233,0.2);">Workflow</span>
+    </div>
+  </div>
+</div>
+<!-- 4 -->
+<div class="project-card reveal" data-category="agentic">
+  <div class="project-img-wrap">
+    <video src="agentic4.mp4" controls autoplay muted loop style="width:100%; height:100%; object-fit:cover;">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+  <div style="padding:1.5rem;">
+    <span style="background:rgba(16,185,129,0.15); color:#10B981; font-size:11px; padding:4px 12px; border-radius:999px; font-weight:500;">Agentic AI</span>
+    <h4 class="font-poppins font-semibold text-lg mt-3 mb-2">Translator Video</h4>
+    <p style="color:var(--muted); font-size:13px; line-height:1.6;">AI-powered bilingual translator using a triage agent to detect language and route tasks to specialized English/Urdu agents for accurate, natural translations. Built with agent-based architecture for scalable, real-world use.</p>
+    <div class="flex flex-wrap gap-2 mt-3">
+      <span style="background:rgba(99,102,241,0.1); color:#6366F1; font-size:11px; padding:3px 10px; border-radius:6px; border:1px solid rgba(99,102,241,0.2);">OpenSDK</span>
+      <span style="background:rgba(16,185,129,0.1); color:#10B981; font-size:11px; padding:3px 10px; border-radius:6px; border:1px solid rgba(16,185,129,0.2);">Agentic AI</span>
+      <span style="background:rgba(14,165,233,0.1); color:#38BDF8; font-size:11px; padding:3px 10px; border-radius:6px; border:1px solid rgba(14,165,233,0.2);">Workflow</span>
+    </div>
+  </div>
+</div>
+<!-- 5 -->
+<div class="project-card reveal" data-category="agentic">
+  <div class="project-img-wrap">
+    <video src="agentic5.mp4" controls autoplay muted loop style="width:100%; height:100%; object-fit:cover;">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+  <div style="padding:1.5rem;">
+    <span style="background:rgba(16,185,129,0.15); color:#10B981; font-size:11px; padding:4px 12px; border-radius:999px; font-weight:500;">Agentic AI</span>
+    <h4 class="font-poppins font-semibold text-lg mt-3 mb-2">Smart Text Summarizer Using AI Agents</h4>
+    <p style="color:var(--muted); font-size:13px; line-height:1.6;">AI-powered text summarizer that condenses long content into concise insights while preserving key ideas. Built with Gemini 2.0 Flash via OpenAI API and an agent with custom instructions, using async execution for scalable processing.</p>
+    <div class="flex flex-wrap gap-2 mt-3">
+      <span style="background:rgba(99,102,241,0.1); color:#6366F1; font-size:11px; padding:3px 10px; border-radius:6px; border:1px solid rgba(99,102,241,0.2);">OpenSDK</span>
+      <span style="background:rgba(16,185,129,0.1); color:#10B981; font-size:11px; padding:3px 10px; border-radius:6px; border:1px solid rgba(16,185,129,0.2);">Agentic AI</span>
+      <span style="background:rgba(14,165,233,0.1); color:#38BDF8; font-size:11px; padding:3px 10px; border-radius:6px; border:1px solid rgba(14,165,233,0.2);">Workflow</span>
+    </div>
+  </div>
+</div>
+<!-- 6 -->
+<div class="project-card reveal" data-category="agentic">
+  <div class="project-img-wrap">
+    <video src="agentic6.mp4" controls autoplay muted loop style="width:100%; height:100%; object-fit:cover;">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+  <div style="padding:1.5rem;">
+    <span style="background:rgba(16,185,129,0.15); color:#10B981; font-size:11px; padding:4px 12px; border-radius:999px; font-weight:500;">Agentic AI</span>
+    <h4 class="font-poppins font-semibold text-lg mt-3 mb-2">CLI Todo App using Spec-Driven Development (SDD) with AI</h4>
+    <p style="color:var(--muted); font-size:13px; line-height:1.6;">A professional CLI Todo Manager built with Spec-Driven Development (SDD), leveraging AI to transform structured specifications into executable tasks with reliable validation.</p>
+    <div class="flex flex-wrap gap-2 mt-3">
+      <span style="background:rgba(99,102,241,0.1); color:#6366F1; font-size:11px; padding:3px 10px; border-radius:6px; border:1px solid rgba(99,102,241,0.2);">OpenSDK</span>
+      <span style="background:rgba(16,185,129,0.1); color:#10B981; font-size:11px; padding:3px 10px; border-radius:6px; border:1px solid rgba(16,185,129,0.2);">Agentic AI</span>
+      <span style="background:rgba(14,165,233,0.1); color:#38BDF8; font-size:11px; padding:3px 10px; border-radius:6px; border:1px solid rgba(14,165,233,0.2);">Workflow</span>
+      <span style="background:rgba(245,158,11,0.1); color:#F59E0B; font-size:11px; padding:3px 10px; border-radius:6px; border:1px solid rgba(245,158,11,0.2);">Specify</span>
+      <span style="background:rgba(245,158,11,0.1); color:#F59E0B; font-size:11px; padding:3px 10px; border-radius:6px; border:1px solid rgba(245,158,11,0.2);">Plan</span>
+      <span style="background:rgba(245,158,11,0.1); color:#F59E0B; font-size:11px; padding:3px 10px; border-radius:6px; border:1px solid rgba(245,158,11,0.2);">Task</span>
+      <span style="background:rgba(245,158,11,0.1); color:#F59E0B; font-size:11px; padding:3px 10px; border-radius:6px; border:1px solid rgba(245,158,11,0.2);">Implement</span>
+      <span style="background:rgba(245,158,11,0.1); color:#F59E0B; font-size:11px; padding:3px 10px; border-radius:6px; border:1px solid rgba(245,158,11,0.2);">Validate</span>
+    </div>
+  </div>
+</div>
+<!-- 7 -->
+<div class="project-card reveal" data-category="agentic">
+  <div class="project-img-wrap">
+    <video src="agentic7.mp4" controls autoplay muted loop style="width:100%; height:100%; object-fit:cover;">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+  <div style="padding:1.5rem;">
+    <span style="background:rgba(16,185,129,0.15); color:#10B981; font-size:11px; padding:4px 12px; border-radius:999px; font-weight:500;">Agentic AI</span>
+    <h4 class="font-poppins font-semibold text-lg mt-3 mb-2">Full-Stack Todo Web Application with Modern Tech Stack</h4>
+    <p style="color:var(--muted); font-size:13px; line-height:1.6;">Full-stack Todo application built with a modern tech stack. 🛠️ Tech Stack: Frontend: Next.js 16+ | Backend: Python FastAPI | Database: Neon PostgreSQL | ORM: SQLModel | Tools: Claude Code + Spec-Kit Plus.</p>
+    <div class="flex flex-wrap gap-2 mt-3">
+      <span style="background:rgba(99,102,241,0.1); color:#6366F1; font-size:11px; padding:3px 10px; border-radius:6px; border:1px solid rgba(99,102,241,0.2);">OpenSDK</span>
+      <span style="background:rgba(16,185,129,0.1); color:#10B981; font-size:11px; padding:3px 10px; border-radius:6px; border:1px solid rgba(16,185,129,0.2);">Agentic AI</span>
+      <span style="background:rgba(14,165,233,0.1); color:#38BDF8; font-size:11px; padding:3px 10px; border-radius:6px; border:1px solid rgba(14,165,233,0.2);">Workflow</span>
+    </div>
+  </div>
+</div>      
+
+      <div class="project-card reveal" data-category="html">
+        <div class="project-img-wrap">
+          <img src="project5.png" alt="Task Manager App"
+               onerror="this.src='https://placehold.co/600x340/1A1A2E/8B5CF6?text=Project+5'" />
+          <div class="project-overlay">
+            <div class="flex gap-2 flex-wrap mb-3">
+              <span style="background:rgba(108,99,255,0.8); color:#fff; font-size:11px; padding:3px 10px; border-radius:999px;">Html5</span>
+              <span style="background:rgba(245,158,11,0.8); color:#fff; font-size:11px; padding:3px 10px; border-radius:999px;">Css</span>
+            </div>
+            <div class="flex gap-3">
+              <a href="https://palindrome-knai.vercel.app/" target="_blank" style="background:var(--primary); color:#fff; padding:8px 16px; border-radius:8px; font-size:12px; font-weight:600; text-decoration:none;">Live Demo ↗</a>
+              <!-- <a href="#" style="border:1px solid rgba(255,255,255,0.3); color:#fff; padding:8px 16px; border-radius:8px; font-size:12px; font-weight:600; text-decoration:none;">GitHub ↗</a> -->
+            </div>
+          </div>
+        </div>
+        <div style="padding:1.5rem;">
+          <span style="background:rgba(139,92,246,0.15); color:#8B5CF6; font-size:11px; padding:4px 12px; border-radius:999px; font-weight:500;">Html & Css</span>
+          <h4 class="font-poppins font-semibold text-lg mt-3 mb-2">Palaindrome Project</h4>
+          <p style="color:var(--muted); font-size:13px; line-height:1.6;">This project is a simple palindrome checker that checks if a word is a palindrome.</p>
+          <div class="flex flex-wrap gap-2 mt-3">
+            <span style="background:rgba(255,255,255,0.05); color:var(--muted); font-size:11px; padding:3px 10px; border-radius:6px;">Html5</span>
+            <span style="background:rgba(255,255,255,0.05); color:var(--muted); font-size:11px; padding:3px 10px; border-radius:6px;">Css</span>
+            
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card reveal" data-category="html">
+        <div class="project-img-wrap">
+          <img src="project7.png" alt="Task Manager App"
+               onerror="this.src='https://placehold.co/600x340/1A1A2E/8B5CF6?text=Project+5'" />
+          <div class="project-overlay">
+            <div class="flex gap-2 flex-wrap mb-3">
+              <span style="background:rgba(108,99,255,0.8); color:#fff; font-size:11px; padding:3px 10px; border-radius:999px;">Html5</span>
+              <span style="background:rgba(245,158,11,0.8); color:#fff; font-size:11px; padding:3px 10px; border-radius:999px;">Css</span>
+            </div>
+            <div class="flex gap-3">
+              <a href="https://counter-application-knai.vercel.app/" target="_blank" style="background:var(--primary); color:#fff; padding:8px 16px; border-radius:8px; font-size:12px; font-weight:600; text-decoration:none;">Live Demo ↗</a>
+              <!-- <a href="#" style="border:1px solid rgba(255,255,255,0.3); color:#fff; padding:8px 16px; border-radius:8px; font-size:12px; font-weight:600; text-decoration:none;">GitHub ↗</a> -->
+            </div>
+          </div>
+        </div>
+        <div style="padding:1.5rem;">
+          <span style="background:rgba(139,92,246,0.15); color:#8B5CF6; font-size:11px; padding:4px 12px; border-radius:999px; font-weight:500;">Html & Css</span>
+          <h4 class="font-poppins font-semibold text-lg mt-3 mb-2">Counter Project</h4>
+          <p style="color:var(--muted); font-size:13px; line-height:1.6;">This project is a simple counter that counts up from 0 to 100.</p>
+          <div class="flex flex-wrap gap-2 mt-3">
+            <span style="background:rgba(255,255,255,0.05); color:var(--muted); font-size:11px; padding:3px 10px; border-radius:6px;">Html5</span>
+            <span style="background:rgba(255,255,255,0.05); color:var(--muted); font-size:11px; padding:3px 10px; border-radius:6px;">Css</span>
+            
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card reveal" data-category="nextjs">
+        <div class="project-img-wrap">
+          <img src="project6.png" alt="Resturant Website"
+               onerror="this.src='https://placehold.co/600x340/1A1A2E/06B6D4?text=Project+6'" />
+          <div class="project-overlay">
+            <div class="flex gap-2 flex-wrap mb-3">
+              <span style="background:rgba(108,99,255,0.8); color:#fff; font-size:11px; padding:3px 10px; border-radius:999px;">Next.js</span>
+              <span style="background:rgba(245,158,11,0.8); color:#fff; font-size:11px; padding:3px 10px; border-radius:999px;">Typescript</span>
+              <span style="background:rgba(245,158,11,0.8); color:#fff; font-size:11px; padding:3px 10px; border-radius:999px;">Tailwind css</span>
+            </div>
+            <div class="flex gap-3">
+              <a href="https://foodtuck-hac3.vercel.app/" target="_blank" style="background:var(--primary); color:#fff; padding:8px 16px; border-radius:8px; font-size:12px; font-weight:600; text-decoration:none;">Live Demo ↗</a>
+              <!-- <a href="#" style="border:1px solid rgba(255,255,255,0.3); color:#fff; padding:8px 16px; border-radius:8px; font-size:12px; font-weight:600; text-decoration:none;">GitHub ↗</a> -->
+            </div>
+          </div>
+        </div>
+        <div style="padding:1.5rem;">
+          <span style="background:rgba(6,182,212,0.15); color:#06B6D4; font-size:11px; padding:4px 12px; border-radius:999px; font-weight:500;">Next.js</span>
+          <h4 class="font-poppins font-semibold text-lg mt-3 mb-2">Resturant Website</h4>
+          <p style="color:var(--muted); font-size:13px; line-height:1.6;">Beautiful layout and responsive design.</p>
+          <div class="flex flex-wrap gap-2 mt-3">
+            <span style="background:rgba(255,255,255,0.05); color:var(--muted); font-size:11px; padding:3px 10px; border-radius:6px;">Next.js</span>
+            <span style="background:rgba(255,255,255,0.05); color:var(--muted); font-size:11px; padding:3px 10px; border-radius:6px;">Typescript</span>
+            <span style="background:rgba(255,255,255,0.05); color:var(--muted); font-size:11px; padding:3px 10px; border-radius:6px;">Tailwind</span>
+          </div>
+        </div>
+      </div>
+      <!-- project 8 -->
+      <div class="project-card reveal" data-category="nextjs">
+        <div class="project-img-wrap">
+          <img src="project8.png" alt=""
+               onerror="this.src='https://placehold.co/600x340/1A1A2E/06B6D4?text=Project+6'" />
+          <div class="project-overlay">
+            <div class="flex gap-2 flex-wrap mb-3">
+              <span style="background:rgba(108,99,255,0.8); color:#fff; font-size:11px; padding:3px 10px; border-radius:999px;">Next.js</span>
+              <span style="background:rgba(245,158,11,0.8); color:#fff; font-size:11px; padding:3px 10px; border-radius:999px;">Typescript</span>
+              <span style="background:rgba(245,158,11,0.8); color:#fff; font-size:11px; padding:3px 10px; border-radius:999px;">Tailwind css</span>
+            </div>
+            <div class="flex gap-3">
+              <a href="https://count-down-timer-knai.vercel.app/" target="_blank" style="background:var(--primary); color:#fff; padding:8px 16px; border-radius:8px; font-size:12px; font-weight:600; text-decoration:none;">Live Demo ↗</a>
+              <!-- <a href="#" style="border:1px solid rgba(255,255,255,0.3); color:#fff; padding:8px 16px; border-radius:8px; font-size:12px; font-weight:600; text-decoration:none;">GitHub ↗</a> -->
+            </div>
+          </div>
+        </div>
+        <div style="padding:1.5rem;">
+          <span style="background:rgba(6,182,212,0.15); color:#06B6D4; font-size:11px; padding:4px 12px; border-radius:999px; font-weight:500;">Next.js</span>
+          <h4 class="font-poppins font-semibold text-lg mt-3 mb-2">Countdown Timer</h4>
+          <p style="color:var(--muted); font-size:13px; line-height:1.6;"> This project is a simple countdown timer that counts down from a given time.</p>
+          <div class="flex flex-wrap gap-2 mt-3">
+            <span style="background:rgba(255,255,255,0.05); color:var(--muted); font-size:11px; padding:3px 10px; border-radius:6px;">Next.js</span>
+            <span style="background:rgba(255,255,255,0.05); color:var(--muted); font-size:11px; padding:3px 10px; border-radius:6px;">Typescript</span>
+            <span style="background:rgba(255,255,255,0.05); color:var(--muted); font-size:11px; padding:3px 10px; border-radius:6px;">Tailwind</span>
+          </div>
+        </div>
+      </div>
+      <!--  -->
+    </div>
+
+    <div class="text-center mt-12 reveal">
+      <a href="#projects" class="btn-outline px-10 py-4 rounded-full font-poppins font-semibold inline-block">
+        View All Projects <i class="fa-solid fa-arrow-right ml-2"></i>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FAQ ===================== -->
+<section id="faq" style="background:var(--dark); padding:100px 0;">
+  <div class="max-w-3xl mx-auto px-6 md:px-12">
+    <div class="text-center mb-16 reveal">
+      <span class="section-label">— FAQ</span>
+      <h2 class="section-title">Frequently Asked <span class="gradient-text">Questions</span></h2>
+    </div>
+
+    <div class="flex flex-col gap-4" id="faqContainer">
+      <div class="faq-item reveal" style="background:#fff; border:1px solid #E2E8F0; border-radius:14px; padding:0; overflow:hidden; transition:all 0.3s ease; box-shadow:0 2px 10px rgba(0,0,0,0.04);">
+        <button class="faq-header w-full flex items-center justify-between p-5 text-left" aria-expanded="false">
+          <span class="font-poppins font-600 text-base" style="color:#1E293B;">What services do you offer?</span>
+          <i class="fa-solid fa-chevron-down faq-chevron" style="color:var(--primary); flex-shrink:0; margin-left:1rem;"></i>
+        </button>
+        <div class="faq-answer" style="padding:0 1.25rem;">
+          <p style="color:#64748B; font-size:14px; line-height:1.8; padding-bottom:1.25rem;">I offer frontend web development, UI/UX design, responsive website design, React/Next.js development, performance optimization, and freelance web consulting services.</p>
+        </div>
+      </div>
+
+      <div class="faq-item reveal" style="background:#fff; border:1px solid #E2E8F0; border-radius:14px; overflow:hidden; transition:all 0.3s ease; box-shadow:0 2px 10px rgba(0,0,0,0.04);">
+        <button class="faq-header w-full flex items-center justify-between p-5 text-left" aria-expanded="false">
+          <span class="font-poppins font-600 text-base" style="color:#1E293B;">What is your typical project timeline?</span>
+          <i class="fa-solid fa-chevron-down faq-chevron" style="color:var(--primary); flex-shrink:0; margin-left:1rem;"></i>
+        </button>
+        <div class="faq-answer" style="padding:0 1.25rem;">
+          <p style="color:#64748B; font-size:14px; line-height:1.8; padding-bottom:1.25rem;">Project timelines vary based on complexity. A simple landing page takes 3–5 days, while a full website can take 2–4 weeks. I always provide a detailed timeline before starting.</p>
+        </div>
+      </div>
+
+      <div class="faq-item reveal" style="background:#fff; border:1px solid #E2E8F0; border-radius:14px; overflow:hidden; transition:all 0.3s ease; box-shadow:0 2px 10px rgba(0,0,0,0.04);">
+        <button class="faq-header w-full flex items-center justify-between p-5 text-left" aria-expanded="false">
+          <span class="font-poppins font-600 text-base" style="color:#1E293B;">What technologies do you specialize in?</span>
+          <i class="fa-solid fa-chevron-down faq-chevron" style="color:var(--primary); flex-shrink:0; margin-left:1rem;"></i>
+        </button>
+        <div class="faq-answer" style="padding:0 1.25rem;">
+          <p style="color:#64748B; font-size:14px; line-height:1.8; padding-bottom:1.25rem;">I specialize in HTML5, CSS3, JavaScript, TypeScript, React.js, Next.js, and Tailwind CSS for frontend development.</p>
+        </div>
+      </div>
+
+      <div class="faq-item reveal" style="background:#fff; border:1px solid #E2E8F0; border-radius:14px; overflow:hidden; transition:all 0.3s ease; box-shadow:0 2px 10px rgba(0,0,0,0.04);">
+        <button class="faq-header w-full flex items-center justify-between p-5 text-left" aria-expanded="false">
+          <span class="font-poppins font-600 text-base" style="color:#1E293B;">Do you work with international clients?</span>
+          <i class="fa-solid fa-chevron-down faq-chevron" style="color:var(--primary); flex-shrink:0; margin-left:1rem;"></i>
+        </button>
+        <div class="faq-answer" style="padding:0 1.25rem;">
+          <p style="color:#64748B; font-size:14px; line-height:1.8; padding-bottom:1.25rem;">Yes! I work with clients worldwide. Communication happens via WhatsApp, email, or video call — whatever works best for you.</p>
+        </div>
+      </div>
+
+      <div class="faq-item reveal" style="background:#fff; border:1px solid #E2E8F0; border-radius:14px; overflow:hidden; transition:all 0.3s ease; box-shadow:0 2px 10px rgba(0,0,0,0.04);">
+        <button class="faq-header w-full flex items-center justify-between p-5 text-left" aria-expanded="false">
+          <span class="font-poppins font-600 text-base" style="color:#1E293B;">How do I hire you for a project?</span>
+          <i class="fa-solid fa-chevron-down faq-chevron" style="color:var(--primary); flex-shrink:0; margin-left:1rem;"></i>
+        </button>
+        <div class="faq-answer" style="padding:0 1.25rem;">
+          <p style="color:#64748B; font-size:14px; line-height:1.8; padding-bottom:1.25rem;">Simply click the "Hire Me" button, fill in your details, and I'll receive your message on WhatsApp instantly. I respond within 24 hours.</p>
+        </div>
+      </div>
+
+      <div class="faq-item reveal" style="background:#fff; border:1px solid #E2E8F0; border-radius:14px; overflow:hidden; transition:all 0.3s ease; box-shadow:0 2px 10px rgba(0,0,0,0.04);">
+        <button class="faq-header w-full flex items-center justify-between p-5 text-left" aria-expanded="false">
+          <span class="font-poppins font-600 text-base" style="color:#1E293B;">Do you provide post-launch support?</span>
+          <i class="fa-solid fa-chevron-down faq-chevron" style="color:var(--primary); flex-shrink:0; margin-left:1rem;"></i>
+        </button>
+        <div class="faq-answer" style="padding:0 1.25rem;">
+          <p style="color:#64748B; font-size:14px; line-height:1.8; padding-bottom:1.25rem;">Yes, I offer 30 days of free bug fixes and support after project completion. Extended support packages are also available.</p>
+        </div>
+      </div>
+
+      <div class="faq-item reveal" style="background:#fff; border:1px solid #E2E8F0; border-radius:14px; overflow:hidden; transition:all 0.3s ease; box-shadow:0 2px 10px rgba(0,0,0,0.04);">
+        <button class="faq-header w-full flex items-center justify-between p-5 text-left" aria-expanded="false">
+          <span class="font-poppins font-600 text-base" style="color:#1E293B;">What is your pricing model?</span>
+          <i class="fa-solid fa-chevron-down faq-chevron" style="color:var(--primary); flex-shrink:0; margin-left:1rem;"></i>
+        </button>
+        <div class="faq-answer" style="padding:0 1.25rem;">
+          <p style="color:#64748B; font-size:14px; line-height:1.8; padding-bottom:1.25rem;">Pricing depends on project scope and complexity. I offer both fixed-price and hourly models. Contact me for a free quote!</p>
+        </div>
+      </div>
+
+      <div class="faq-item reveal" style="background:#fff; border:1px solid #E2E8F0; border-radius:14px; overflow:hidden; transition:all 0.3s ease; box-shadow:0 2px 10px rgba(0,0,0,0.04);">
+        <button class="faq-header w-full flex items-center justify-between p-5 text-left" aria-expanded="false">
+          <span class="font-poppins font-600 text-base" style="color:#1E293B;">Can you redesign my existing website?</span>
+          <i class="fa-solid fa-chevron-down faq-chevron" style="color:var(--primary); flex-shrink:0; margin-left:1rem;"></i>
+        </button>
+        <div class="faq-answer" style="padding:0 1.25rem;">
+          <p style="color:#64748B; font-size:14px; line-height:1.8; padding-bottom:1.25rem;">Absolutely! I specialize in website redesigns, modernizing legacy sites with improved performance, design, and user experience.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CONTACT ===================== -->
+<section id="contact" style="background:var(--surface); padding:100px 0;">
+  <div class="max-w-7xl mx-auto px-6 md:px-12">
+    <div class="text-center mb-16 reveal">
+      <span class="section-label">— Get In Touch</span>
+      <h2 class="section-title">Let's Work <span class="gradient-text">Together</span></h2>
+      <p style="color:var(--muted); margin-top:1rem; max-width:500px; margin-left:auto; margin-right:auto;">Have a project in mind? Let's discuss how I can help bring your vision to life.</p>
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-16">
+      <!-- Contact info -->
+      <div class="reveal-left">
+        <div class="flex flex-col gap-6 mb-10">
+          <div class="flex items-center gap-4">
+            <div style="width:50px; height:50px; background:#F0F9FF; border:1px solid rgba(14,165,233,0.2); border-radius:14px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+              <i class="fa-solid fa-location-dot" style="color:var(--primary);"></i>
+            </div>
+            <div>
+              <div style="font-size:12px; color:#64748B; text-transform:uppercase; letter-spacing:1px;">Location</div>
+              <div style="font-weight:600; color:#1E293B;">Pakistan</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-4">
+            <div style="width:50px; height:50px; background:#F0F9FF; border:1px solid rgba(14,165,233,0.2); border-radius:14px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+              <i class="fa-solid fa-envelope" style="color:var(--primary);"></i>
+            </div>
+            <div>
+              <div style="font-size:12px; color:#64748B; text-transform:uppercase; letter-spacing:1px;">Email</div>
+              <div style="font-weight:600; color:#1E293B;">arshmanedu123@gmail.com</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-4">
+            <div style="width:50px; height:50px; background:#F0FDF4; border:1px solid rgba(37,211,102,0.2); border-radius:14px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+              <i class="fa-brands fa-whatsapp" style="color:#25D366; font-size:20px;"></i>
+            </div>
+            <div>
+              <div style="font-size:12px; color:#64748B; text-transform:uppercase; letter-spacing:1px;">WhatsApp</div>
+              <div style="font-weight:600; color:#1E293B;">+923186346964</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-4">
+            <div style="width:50px; height:50px; background:#F0F9FF; border:1px solid rgba(14,165,233,0.2); border-radius:14px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+              <i class="fa-solid fa-clock" style="color:var(--primary);"></i>
+            </div>
+            <div>
+              <div style="font-size:12px; color:#64748B; text-transform:uppercase; letter-spacing:1px;">Response Time</div>
+              <div style="font-weight:600; color:#10B981;">Within 24 hours</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex gap-3">
+          <a href="#" class="social-icon" style="width:50px; height:50px; font-size:18px; color:#FF0000; border-color:#E2E8F0;" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+          <a href="#" class="social-icon" style="width:50px; height:50px; font-size:18px; color:#1877F2; border-color:#E2E8F0;" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#" class="social-icon" style="width:50px; height:50px; font-size:18px; color:#64748B; border-color:#E2E8F0;" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="https://wa.me/923186346964" target="_blank" class="social-icon" style="width:50px; height:50px; font-size:18px; color:#25D366; border-color:#E2E8F0;" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+        </div>
+
+        <!-- Hire Me CTA card -->
+        <div style="margin-top:2.5rem; background:var(--gradient); border-radius:16px; padding:2rem; position:relative; overflow:hidden;">
+          <div style="position:absolute; inset:0; background:rgba(0,0,0,0.2);"></div>
+          <div style="position:relative; z-index:1;">
+            <i class="fa-brands fa-whatsapp" style="font-size:2.5rem; color:#fff; margin-bottom:1rem; display:block;"></i>
+            <h4 class="font-poppins font-700 text-xl mb-2">Ready to Start?</h4>
+            <p style="font-size:14px; opacity:0.9; margin-bottom:1.5rem;">Click below to send me a WhatsApp message directly</p>
+            <button onclick="openModal()" style="background:#fff; color:var(--primary); padding:12px 28px; border-radius:999px; font-weight:700; font-family:'Poppins',sans-serif; font-size:14px; border:none; cursor:pointer;">
+              <i class="fa-brands fa-whatsapp mr-2" style="color:#25D366;"></i>Hire Me Now
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact form -->
+      <div class="reveal-right">
+        <form id="contactForm" style="background:#fff; border:1px solid #E2E8F0; border-radius:20px; padding:2rem; box-shadow:0 4px 20px rgba(0,0,0,0.04);">
+          <div class="grid sm:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label style="font-size:13px; color:#475569; display:block; margin-bottom:8px;">First Name *</label>
+              <input type="text" class="form-input" placeholder="John" required />
+            </div>
+            <div>
+              <label style="font-size:13px; color:#475569; display:block; margin-bottom:8px;">Last Name *</label>
+              <input type="text" class="form-input" placeholder="Doe" required />
+            </div>
+          </div>
+          <div class="mb-4">
+            <label style="font-size:13px; color:#475569; display:block; margin-bottom:8px;">Email Address *</label>
+            <input type="email" class="form-input" placeholder="john@example.com" required />
+          </div>
+          <div class="mb-4">
+            <label style="font-size:13px; color:#475569; display:block; margin-bottom:8px;">Subject *</label>
+            <input type="text" class="form-input" placeholder="Project Inquiry" required />
+          </div>
+          <div class="mb-6">
+            <label style="font-size:13px; color:#475569; display:block; margin-bottom:8px;">Message *</label>
+            <textarea class="form-input" rows="5" placeholder="Tell me about your project..." required style="resize:vertical;"></textarea>
+          </div>
+          <button type="submit" id="contactSubmitBtn" class="btn-gradient w-full py-4 rounded-xl font-poppins font-semibold text-base">
+            Send Message <i class="fa-solid fa-paper-plane ml-2"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer style="background:var(--dark); border-top:1px solid rgba(14,165,233,0.15); padding:70px 0 30px;">
+  <div class="max-w-7xl mx-auto px-6 md:px-12">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+      <!-- Brand -->
+      <div>
+        <div class="flex items-center gap-3 mb-4">
+          <img src="logo.png" alt="Logo" style="height:80px;" onerror="this.style.display='none'" />
+        </div>
+        <p style="color:#64748B; font-size:13px; line-height:1.8; margin-bottom:1.5rem;">Building beautiful web experiences that matter.</p>
+        <div class="flex gap-3">
+          <a href="#" class="social-icon" aria-label="YouTube" style="color:#FF0000; border-color:#E2E8F0;"><i class="fa-brands fa-youtube"></i></a>
+          <a href="#" class="social-icon" aria-label="Facebook" style="color:#1877F2; border-color:#E2E8F0;"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#" class="social-icon" aria-label="Instagram" style="color:#E4405F; border-color:#E2E8F0;"><i class="fa-brands fa-instagram"></i></a>
+          <a href="https://wa.me/923186346964" target="_blank" class="social-icon" aria-label="WhatsApp" style="color:#25D366; border-color:#E2E8F0;"><i class="fa-brands fa-whatsapp"></i></a>
+        </div>
+      </div>
+      <!-- Quick Links -->
+      <div>
+        <h5 class="font-poppins font-600 text-base mb-5" style="color:#1E293B;">Quick Links</h5>
+        <div class="flex flex-col gap-3">
+          <a href="#hero" style="color:#64748B; font-size:14px; text-decoration:none; transition:color 0.3s;" onmouseover="this.style.color='#6C63FF'" onmouseout="this.style.color='#64748B'">Home</a>
+          <a href="#about" style="color:#64748B; font-size:14px; text-decoration:none; transition:color 0.3s;" onmouseover="this.style.color='#6C63FF'" onmouseout="this.style.color='#64748B'">About</a>
+          <a href="#skills" style="color:#64748B; font-size:14px; text-decoration:none; transition:color 0.3s;" onmouseover="this.style.color='#6C63FF'" onmouseout="this.style.color='#64748B'">Skills</a>
+          <a href="#projects" style="color:#64748B; font-size:14px; text-decoration:none; transition:color 0.3s;" onmouseover="this.style.color='#6C63FF'" onmouseout="this.style.color='#64748B'">Projects</a>
+          <a href="#faq" style="color:#64748B; font-size:14px; text-decoration:none; transition:color 0.3s;" onmouseover="this.style.color='#6C63FF'" onmouseout="this.style.color='#64748B'">FAQ</a>
+          <a href="#contact" style="color:#64748B; font-size:14px; text-decoration:none; transition:color 0.3s;" onmouseover="this.style.color='#6C63FF'" onmouseout="this.style.color='#64748B'">Contact</a>
+        </div>
+      </div>
+      <!-- Services -->
+      <div>
+        <h5 class="font-poppins font-600 text-base mb-5" style="color:#1E293B;">Services</h5>
+        <div class="flex flex-col gap-3">
+          <span style="color:#64748B; font-size:14px;">Frontend Development</span>
+          <span style="color:#64748B; font-size:14px;">UI/UX Design</span>
+          <span style="color:#64748B; font-size:14px;">React Development</span>
+          <span style="color:#64748B; font-size:14px;">Next.js Apps</span>
+          <span style="color:#64748B; font-size:14px;">Performance Optimization</span>
+          <span style="color:#64748B; font-size:14px;">Consultation</span>
+        </div>
+      </div>
+      <!-- Contact -->
+      <div>
+        <h5 class="font-poppins font-600 text-base mb-5" style="color:#1E293B;">Contact Info</h5>
+        <div class="flex flex-col gap-3">
+          <div class="flex items-center gap-3">
+            <i class="fa-solid fa-location-dot" style="color:var(--primary); font-size:13px; width:16px;"></i>
+            <span style="color:#64748B; font-size:13px;">Pakistan</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <i class="fa-solid fa-envelope" style="color:var(--primary); font-size:13px; width:16px;"></i>
+            <span style="color:#64748B; font-size:13px;">arshmanedu123@gmail.com</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <i class="fa-brands fa-whatsapp" style="color:#25D366; font-size:13px; width:16px;"></i>
+            <span style="color:#64748B; font-size:13px;">+923186346964</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ===================== HIRE ME MODAL ===================== -->
+<div id="hireModal" role="dialog" aria-modal="true" aria-label="Hire Me Form">
+  <div class="modal-box" id="modalBox">
+    <!-- Header -->
+    <div class="flex items-start justify-between mb-6">
+      <div>
+        <div class="flex items-center gap-3 mb-2">
+          <i class="fa-brands fa-whatsapp" style="font-size:2rem; color:#25D366;"></i>
+          <h3 class="font-poppins font-bold text-2xl gradient-text">Hire Me</h3>
+        </div>
+        <p style="color:#64748B; font-size:13px;">Fill the form and I'll receive your message instantly on WhatsApp</p>
+      </div>
+      <button onclick="closeModal()" style="background:#F1F5F9; border:none; color:#64748B; width:36px; height:36px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; margin-left:1rem;" aria-label="Close modal">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <!-- Form -->
+    <form id="hireForm" novalidate>
+      <div class="grid sm:grid-cols-2 gap-4 mb-4">
+        <div>
+          <label style="font-size:13px; color:#475569; display:block; margin-bottom:6px;">First Name *</label>
+          <input type="text" id="hireFirstName" class="form-input" placeholder="John" />
+          <span class="field-error" style="color:#EF4444; font-size:12px; display:none;">Required</span>
+        </div>
+        <div>
+          <label style="font-size:13px; color:#475569; display:block; margin-bottom:6px;">Last Name *</label>
+          <input type="text" id="hireLastName" class="form-input" placeholder="Doe" />
+          <span class="field-error" style="color:#EF4444; font-size:12px; display:none;">Required</span>
+        </div>
+      </div>
+      <div class="mb-4">
+        <label style="font-size:13px; color:#475569; display:block; margin-bottom:6px;">Address *</label>
+        <input type="text" id="hireAddress" class="form-input" placeholder="City, Country" />
+        <span class="field-error" style="color:#EF4444; font-size:12px; display:none;">Required</span>
+      </div>
+      <div class="mb-4">
+        <label style="font-size:13px; color:#475569; display:block; margin-bottom:6px;">WhatsApp Number *</label>
+        <input type="tel" id="hireWhatsapp" class="form-input" placeholder="+92 300 0000000" />
+        <span class="field-error" style="color:#EF4444; font-size:12px; display:none;">Required</span>
+      </div>
+      <div class="mb-4">
+        <label style="font-size:13px; color:var(--muted); display:block; margin-bottom:6px;">Project Type</label>
+        <select id="hireProjectType" class="form-input">
+          <option value="Website Development">Website Development</option>
+          <option value="UI/UX Design">UI/UX Design</option>
+          <option value="React/Next.js App">React/Next.js App</option>
+          <option value="Landing Page">Landing Page</option>
+          <option value="Website Redesign">Website Redesign</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="mb-4">
+        <label style="font-size:13px; color:var(--muted); display:block; margin-bottom:6px;">Budget Range</label>
+        <select id="hireBudget" class="form-input">
+          <option value="Under $100">Under $100</option>
+          <option value="$100 - $500">$100 - $500</option>
+          <option value="$500 - $1000">$500 - $1000</option>
+          <option value="$1000+">$1000+</option>
+          <option value="Let's Discuss">Let's Discuss</option>
+        </select>
+      </div>
+      <div class="mb-6">
+        <label style="font-size:13px; color:#475569; display:block; margin-bottom:6px;">Notes <span style="color:#94A3B8; font-weight:400;">(optional)</span></label>
+        <textarea id="hireNotes" class="form-input" rows="3" placeholder="Tell me about your project..."></textarea>
+      </div>
+      <button type="submit" id="hireSubmitBtn" class="btn-gradient w-full py-4 rounded-xl font-poppins font-semibold text-base">
+        <i class="fa-brands fa-whatsapp mr-2"></i>Send via WhatsApp
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- ===================== JAVASCRIPT ===================== -->
+<script>
+  // ---- Custom Cursor ----
+  const cursor = document.getElementById('cursor');
+  const cursorDot = document.getElementById('cursorDot');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+    cursorDot.style.left = e.clientX + 'px';
+    cursorDot.style.top = e.clientY + 'px';
+  });
+    document.querySelectorAll('a, button, .project-card, .faq-header, .filter-btn, .tech-badge, .service-card').forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('grow'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('grow'));
+    });
+
+  // ---- Navbar scroll ----
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 50);
+  });
+
+  // ---- Mobile menu ----
+  const hamburger = document.getElementById('hamburger');
+  const hamburgerIcon = document.getElementById('hamburgerIcon');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', () => {
+    const isOpen = mobileMenu.classList.toggle('open');
+    hamburgerIcon.className = isOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars';
+  });
+  function closeMobileMenu() {
+    mobileMenu.classList.remove('open');
+    hamburgerIcon.className = 'fa-solid fa-bars';
+  }
+  document.addEventListener('click', e => {
+    if (!navbar.contains(e.target) && !mobileMenu.contains(e.target)) closeMobileMenu();
+  });
+
+  // ---- Typewriter ----
+  const tw = document.getElementById('typewriter');
+  tw.textContent = 'Frontend Web Developer';
+
+  // ---- Scroll reveal ----
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        entry.target.style.transitionDelay = (i * 0.08) + 's';
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => revealObserver.observe(el));
+
+  // ---- Stats counter ----
+  function animateCounter(el, target) {
+    let start = 0;
+    const dur = 1800;
+    const step = (timestamp) => {
+      if (!start) start = timestamp;
+      const progress = Math.min((timestamp - start) / dur, 1);
+      el.textContent = Math.floor(progress * target) + (target === 100 ? '%' : '+');
+      if (progress < 1) requestAnimationFrame(step);
+      else el.textContent = target + (target === 100 ? '%' : '+');
+    };
+    requestAnimationFrame(step);
+  }
+  const statsObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        document.querySelectorAll('.stat-number').forEach(el => {
+          animateCounter(el, parseInt(el.dataset.target));
+        });
+        statsObserver.disconnect();
+      }
+    });
+  }, { threshold: 0.5 });
+  const firstStat = document.querySelector('.stat-number');
+  if (firstStat) statsObserver.observe(firstStat.closest('.grid'));
+
+  // ---- Skill bars ----
+  const skillObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        document.querySelectorAll('.skill-bar-fill').forEach((bar, i) => {
+          setTimeout(() => { bar.style.width = bar.dataset.width + '%'; }, i * 120);
+        });
+        skillObserver.disconnect();
+      }
+    });
+  }, { threshold: 0.3 });
+  const skillSection = document.getElementById('skillBars');
+  if (skillSection) skillObserver.observe(skillSection);
+
+  // ---- Project filter ----
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      document.querySelectorAll('.project-card').forEach(card => {
+        const show = filter === 'all' || card.dataset.category === filter;
+        card.style.display = show ? 'block' : 'none';
+        if (show) { card.style.animation = 'slideUp 0.4s ease forwards'; }
+      });
+    });
+  });
+
+  // ---- FAQ Accordion ----
+  document.querySelectorAll('.faq-header').forEach(header => {
+    header.addEventListener('click', () => {
+      const item = header.closest('.faq-item');
+      const answer = item.querySelector('.faq-answer');
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => {
+        i.classList.remove('open');
+        i.querySelector('.faq-answer').classList.remove('open');
+        i.querySelector('.faq-header').setAttribute('aria-expanded', 'false');
+      });
+      if (!isOpen) {
+        item.classList.add('open');
+        answer.classList.add('open');
+        header.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+
+  // ---- Modal ----
+  function openModal() {
+    document.getElementById('hireModal').classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal() {
+    document.getElementById('hireModal').classList.remove('show');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('hireModal').addEventListener('click', e => {
+    if (e.target === document.getElementById('hireModal')) closeModal();
+  });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+  // ---- Hire form submit → WhatsApp ----
+  document.getElementById('hireForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const fn = document.getElementById('hireFirstName').value.trim();
+    const ln = document.getElementById('hireLastName').value.trim();
+    const addr = document.getElementById('hireAddress').value.trim();
+    const wa = document.getElementById('hireWhatsapp').value.trim();
+    const pt = document.getElementById('hireProjectType').value;
+    const bud = document.getElementById('hireBudget').value;
+    const notes = document.getElementById('hireNotes').value.trim();
+
+    let valid = true;
+    [['hireFirstName', fn], ['hireLastName', ln], ['hireAddress', addr], ['hireWhatsapp', wa]].forEach(([id, val]) => {
+      const inp = document.getElementById(id);
+      const err = inp.nextElementSibling;
+      if (!val) { err.style.display = 'block'; inp.style.borderColor = '#EF4444'; valid = false; }
+      else { err.style.display = 'none'; inp.style.borderColor = ''; }
+    });
+    if (!valid) return;
+
+    const msg = `🌟 *NEW PROJECT INQUIRY*\n\n👤 *Client Details:*\n• Name: ${fn} ${ln}\n• Address: ${addr}\n• WhatsApp: ${wa}\n\n📋 *Project Details:*\n• Type: ${pt}\n• Budget: ${bud}\n\n📝 *Notes:*\n${notes || 'No additional notes'}\n\n---\n_Sent from knai Developer Portfolio_`;
+
+    window.open('https://wa.me/923186346964?text=' + encodeURIComponent(msg), '_blank');
+    closeModal();
+    document.getElementById('hireForm').reset();
+    showToast('Message sent! I\'ll contact you soon 🎉');
+  });
+
+  // ---- Contact form submit ----
+  document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const btn = document.getElementById('contactSubmitBtn');
+    btn.textContent = 'Sending...';
+    btn.disabled = true;
+    setTimeout(() => {
+      btn.innerHTML = 'Send Message <i class="fa-solid fa-paper-plane ml-2"></i>';
+      btn.disabled = false;
+      this.reset();
+      showToast('Message sent successfully! 🎉');
+    }, 1500);
+  });
+
+  // ---- Toast ----
+  function showToast(msg) {
+    const toast = document.getElementById('toast');
+    document.getElementById('toastMsg').textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3500);
+  }
+
+  // ---- Active nav link on scroll ----
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-link');
+  const activeObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(link => link.classList.remove('active'));
+        const active = document.querySelector(`.nav-link[href="#${entry.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { threshold: 0.4 });
+  sections.forEach(s => activeObserver.observe(s));
+</script>
+</body>
+</html>
